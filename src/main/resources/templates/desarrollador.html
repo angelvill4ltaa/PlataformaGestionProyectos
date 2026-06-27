@@ -12,266 +12,283 @@
 <div id="overlay" class="overlay"></div>
 <div th:replace="components/navbar :: navbar"></div>
 
-<span id="userNameData"
-      th:data-nombre="${session.usuario != null ? session.usuario.nombre : 'U'}"
-      style="display:none"></span>
+<span id="userNameData" th:data-nombre="${session.usuario != null ? session.usuario.nombre : 'U'}" style="display:none"></span>
 
 <main>
-<div class="container-fluid px-4 mt-4">
+	<div class="container-fluid px-4 mt-4">
 
-  <div class="page-header mb-4">
-    <div>
-      <div class="page-breadcrumb">Mi Workspace</div>
-      <h2 class="fw-bold mb-1">
-        <span th:if="${hora < 12}">Buenos días,</span>
-        <span th:if="${hora >= 12 and hora < 18}">Buenas tardes,</span>
-        <span th:if="${hora >= 18}">Buenas noches,</span>
-        <span th:text="${session.usuario.nombre}"></span> 
-      </h2>
-      <p class="text-secondary mb-0">Gestiona tus tareas y monitorea tu avance diario.</p>
-    </div>
-  </div>
+		<div class="dev-hero mb-4">
+		    <div class="hero-content">
+		        <span class="hero-chip">Mi Workspace</span>
+		        <h1 class="hero-title">
+		            <span th:if="${hora < 12}">Buenos días,</span>
+		            <span th:if="${hora >= 12 and hora < 18}">Buenas tardes,</span>
+		            <span th:if="${hora >= 18}">Buenas noches,</span>
+		            <span th:text="${session.usuario.nombre}"></span>
+		        </h1>
+		        <p class="hero-subtitle">
+		            Gestiona tus tareas, revisa prioridades y monitorea tu avance diario.
+		        </p>
+		    </div>
+		    <div class="hero-decoration">
+		        <i class="fa-solid fa-laptop-code"></i>
+		    </div>
+		</div>
 
-  <div class="row g-3 mb-4">
-    <div class="col-6 col-md-3">
-      <div class="content-card text-center py-3">
-        <div class="fs-1 fw-bold text-primary" th:text="${#lists.size(tareas)}">0</div>
-        <div class="text-muted small">Total tareas</div>
-      </div>
-    </div>
-    <div class="col-6 col-md-3">
-      <div class="content-card text-center py-3">
-        <div class="fs-1 fw-bold text-secondary"
-             th:text="${tareas.?[estado.name()=='PENDIENTE'].size()}">0</div>
-        <div class="text-muted small">Pendientes</div>
-      </div>
-    </div>
-    <div class="col-6 col-md-3">
-      <div class="content-card text-center py-3">
-        <div class="fs-1 fw-bold text-warning"
-             th:text="${tareas.?[estado.name()=='EN_PROCESO'].size()}">0</div>
-        <div class="text-muted small">En proceso</div>
-      </div>
-    </div>
-    <div class="col-6 col-md-3">
-      <div class="content-card text-center py-3">
-        <div class="fs-1 fw-bold text-success"
-             th:text="${tareas.?[estado.name()=='FINALIZADO'].size()}">0</div>
-        <div class="text-muted small">Finalizadas</div>
-      </div>
-    </div>
-  </div>
+		<div class="row g-4 mb-4">
+		    <div class="col-md-3">
+		        <div class="metric-card">
+		            <div class="metric-icon total"><i class="fa-solid fa-layer-group"></i></div>
+		            <div>
+		                <span>Total tareas</span>
+		                <h3 th:text="${#lists.size(tareas)}"></h3>
+		            </div>
+		        </div>
+		    </div>
+		    <div class="col-md-3">
+		        <div class="metric-card">
+		            <div class="metric-icon pending"><i class="fa-solid fa-clock"></i></div>
+		            <div>
+		                <span>Pendientes</span>
+		                <h3 th:text="${tareas.?[estado.name()=='PENDIENTE'].size()}"></h3>
+		            </div>
+		        </div>
+		    </div>
+		    <div class="col-md-3">
+		        <div class="metric-card">
+		            <div class="metric-icon process"><i class="fa-solid fa-spinner"></i></div>
+		            <div>
+		                <span>En proceso</span>
+		                <h3 th:text="${tareas.?[estado.name()=='EN_PROCESO'].size()}"></h3>
+		            </div>
+		        </div>
+		    </div>
+		    <div class="col-md-3">
+		        <div class="metric-card">
+		            <div class="metric-icon done"><i class="fa-solid fa-circle-check"></i></div>
+		            <div>
+		                <span>Finalizadas</span>
+		                <h3 th:text="${tareas.?[estado.name()=='FINALIZADO'].size()}"></h3>
+		            </div>
+		        </div>
+		    </div>
+		</div>
 
-  <div class="content-card mb-4">
-    <div class="d-flex justify-content-between align-items-center mb-2">
-      <strong><i class="fa-solid fa-chart-line me-2 text-primary"></i>Progreso general</strong>
-      <span class="text-muted small">
-        <span th:text="${tareas.?[estado.name()=='FINALIZADO'].size()}"></span>
-        /
-        <span th:text="${#lists.size(tareas)}"></span>
-        completadas
-      </span>
-    </div>
-    <div class="progress" style="height: 10px; border-radius: 99px;">
-      <div class="progress-bar bg-success"
-           th:style="'width:' + (${#lists.size(tareas)==0 ? 0 : (tareas.?[estado.name()=='FINALIZADO'].size()*100/#lists.size(tareas))}) + '%'">
-      </div>
-    </div>
-  </div>
+		<div class="row g-4 mb-4">
 
-  <div class="content-card mb-4 d-flex justify-content-between align-items-center"
-       th:if="${!#lists.isEmpty(tareas)}">
-    <div>
-      <div class="text-muted small mb-1"><i class="fa-solid fa-bolt text-warning me-1"></i>Tarea destacada</div>
-      <h5 class="fw-bold mb-1" th:text="${tareas[0].titulo}"></h5>
-      <span class="text-secondary small">Mantén el foco en esta actividad para avanzar tus objetivos del día.</span>
-    </div>
-    <i class="fa-solid fa-bolt fa-2x text-warning opacity-25 d-none d-md-block"></i>
-  </div>
+			<div class="content-card mb-4">
+			    <div class="d-flex justify-content-between align-items-center">
+			        <div>
+			            <small class="fw-semibold text-muted">Tarea destacada</small>
+			            <h4 class="mt-2 mb-2 fw-bold"
+			                th:text="${#lists.isEmpty(tareas) ? 'No tienes tareas pendientes' : tareas[0].titulo}">
+			            </h4>
+			            <span class="text-secondary">
+			                Mantén el enfoque en esta actividad para continuar avanzando en tus objetivos del día.
+			            </span>
+			        </div>
+			        <div class="text-warning fs-1">
+			            <i class="fa-solid fa-bolt"></i>
+			        </div>
+			    </div>
+			</div>
 
-  <div class="row g-3 mb-4">
+			<div class="content-card mb-4">
+			    <div class="d-flex justify-content-between mb-2">
+			        <strong>Progreso general</strong>
+			        <span>
+			            <span th:text="${tareas.?[estado.name()=='FINALIZADO'].size()}"></span>
+			            /
+			            <span th:text="${#lists.size(tareas)}"></span>
+			            completadas
+			        </span>
+			    </div>
+			    <div class="progress progress-dev" role="progressbar">
+			        <div class="progress-bar bg-success"
+			             th:style="'width:' + (${#lists.size(tareas)==0 ? 0 : (tareas.?[estado.name()=='FINALIZADO'].size()*100/#lists.size(tareas))}) + '%'">
+			        </div>
+			    </div>
+			</div>
 
-    <!-- PENDIENTES -->
-    <div class="col-lg-4">
-      <div class="content-card h-100">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <span class="fw-semibold"><i class="fa-solid fa-clock me-2 text-secondary"></i>Pendientes</span>
-          <span class="badge bg-secondary rounded-pill"
-                th:text="${tareas.?[estado.name()=='PENDIENTE'].size()}"></span>
-        </div>
+			<div class="col-lg-4">
+			    <div class="board-column">
+			        <div class="board-header pending-header">
+			            <span>Pendientes</span>
+			            <span class="board-counter" th:text="${tareas.?[estado.name()=='PENDIENTE'].size()}"></span>
+			        </div>
+			        <div class="empty-column" th:if="${tareas.?[estado.name()=='PENDIENTE'].isEmpty()}">
+			            <i class="fa-solid fa-inbox"></i>
+			            <span>No hay tareas pendientes</span>
+			        </div>
+			        <div class="task-modern-card" th:each="t : ${tareas}" th:if="${t.estado.name()=='PENDIENTE'}">
+			            <div class="task-top">
+			                <h6 th:text="${t.titulo}"></h6>
+			                <span th:if="${t.fechaLimite.isBefore(T(java.time.LocalDate).now())}" class="badge bg-danger">
+			                    <i class="fa-solid fa-triangle-exclamation"></i> Retrasada
+			                </span>
+			                <span th:unless="${t.fechaLimite.isBefore(T(java.time.LocalDate).now())}" class="badge bg-secondary">
+			                    Pendiente
+			                </span>
+			            </div>
+			            <p th:text="${t.descripcion}"></p>
+			            <div class="task-date">
+			                <i class="fa-solid fa-calendar"></i>
+			                <span th:text="${#temporals.format(t.fechaLimite,'dd/MM/yyyy')}"></span>
+			            </div>
+			            <div class="task-footer">
+			                <span>
+			                    <i class="fa-solid fa-folder"></i>
+			                    <span th:text="${t.proyecto.nombre}"></span>
+			                </span>
+			                <span th:classappend="${t.prioridad.name()=='ALTA'} ? 'badge bg-danger' : (${t.prioridad.name()=='MEDIA'} ? 'badge bg-warning text-dark' : 'badge bg-info text-dark')"
+			                      th:text="${t.prioridad}"></span>
+			            </div>
+			            <div class="mt-3 d-flex gap-2">
+			                <button class="btn btn-outline-primary btn-sm"
+			                        data-bs-toggle="modal" data-bs-target="#detalleModal"
+			                        th:attr="data-titulo=${t.titulo},data-descripcion=${t.descripcion},data-proyecto=${t.proyecto.nombre},data-prioridad=${t.prioridad},data-estado=${t.estado},data-fecha=${#temporals.format(t.fechaLimite,'dd/MM/yyyy')},data-tarea-id=${t.idTarea}">
+			                    <i class="fa-solid fa-eye"></i>
+			                </button>
+			                <a th:href="@{/tarea/iniciar/{id}(id=${t.idTarea})}" class="btn btn-warning btn-sm flex-grow-1">
+			                    <i class="fa-solid fa-play"></i> Iniciar tarea
+			                </a>
+			            </div>
+			        </div>
+			    </div>
+			</div>
 
-        <div class="text-center text-muted py-4"
-             th:if="${tareas.?[estado.name()=='PENDIENTE'].isEmpty()}">
-          <i class="fa-solid fa-inbox fa-2x mb-2 d-block"></i>
-          Sin tareas pendientes
-        </div>
+			<div class="col-lg-4">
+			    <div class="board-column">
+			        <div class="board-header process-header">
+			            <span>En proceso</span>
+			            <span class="board-counter" th:text="${tareas.?[estado.name()=='EN_PROCESO'].size()}"></span>
+			        </div>
+			        <div class="empty-column" th:if="${tareas.?[estado.name()=='EN_PROCESO'].isEmpty()}">
+			            <i class="fa-solid fa-spinner"></i>
+			            <span>No hay tareas en proceso</span>
+			        </div>
+			        <div class="task-modern-card" th:each="t : ${tareas}" th:if="${t.estado.name()=='EN_PROCESO'}">
+			            <div class="task-top">
+			                <h6 th:text="${t.titulo}"></h6>
+			                <span class="badge bg-warning text-dark">En proceso</span>
+			            </div>
+			            <p th:text="${t.descripcion}"></p>
+			            <div class="task-date">
+			                <i class="fa-solid fa-calendar"></i>
+			                <span th:text="${#temporals.format(t.fechaLimite,'dd/MM/yyyy')}"></span>
+			            </div>
+			            <div class="task-footer">
+			                <span>
+			                    <i class="fa-solid fa-folder"></i>
+			                    <span th:text="${t.proyecto.nombre}"></span>
+			                </span>
+			                <span th:classappend="${t.prioridad.name()=='ALTA'} ? 'badge bg-danger' : (${t.prioridad.name()=='MEDIA'} ? 'badge bg-warning text-dark' : 'badge bg-info text-dark')"
+			                      th:text="${t.prioridad}"></span>
+			            </div>
+			            <div class="mt-3 d-flex gap-2">
+			                <button class="btn btn-outline-primary btn-sm"
+			                        data-bs-toggle="modal" data-bs-target="#detalleModal"
+			                        th:attr="data-titulo=${t.titulo},data-descripcion=${t.descripcion},data-proyecto=${t.proyecto.nombre},data-prioridad=${t.prioridad},data-estado=${t.estado},data-fecha=${#temporals.format(t.fechaLimite,'dd/MM/yyyy')},data-tarea-id=${t.idTarea}">
+			                    <i class="fa-solid fa-eye"></i>
+			                </button>
+			                <a th:href="@{/tarea/finalizar/{id}(id=${t.idTarea})}" class="btn btn-success btn-sm flex-grow-1">
+			                    <i class="fa-solid fa-check"></i> Completar
+			                </a>
+			            </div>
+			        </div>
+			    </div>
+			</div>
 
-        <div th:each="t : ${tareas}" th:if="${t.estado.name()=='PENDIENTE'}"
-             class="border rounded-3 p-3 mb-2 bg-light">
-          <div class="d-flex justify-content-between align-items-start mb-1">
-            <strong class="small" th:text="${t.titulo}"></strong>
-            <span class="badge bg-danger ms-2"
-                  th:if="${t.fechaLimite.isBefore(T(java.time.LocalDate).now())}">Retrasada</span>
-          </div>
-          <p class="text-muted small mb-2" th:text="${t.descripcion}"></p>
-          <div class="d-flex justify-content-between align-items-center mb-2">
-            <span class="text-muted small">
-              <i class="fa-solid fa-calendar me-1"></i>
-              <span th:text="${#temporals.format(t.fechaLimite,'dd/MM/yyyy')}"></span>
-            </span>
-            <span class="badge"
-                  th:classappend="${t.prioridad.name()=='ALTA'} ? 'bg-danger' : (${t.prioridad.name()=='MEDIA'} ? 'bg-warning text-dark' : 'bg-info text-dark')"
-                  th:text="${t.prioridad}"></span>
-          </div>
-          <div class="text-muted small mb-2">
-            <i class="fa-solid fa-folder me-1"></i>
-            <span th:text="${t.proyecto.nombre}"></span>
-          </div>
-          <div class="d-flex gap-2">
-            <button class="btn btn-outline-primary btn-sm"
-                    data-bs-toggle="modal" data-bs-target="#detalleModal"
-                    th:attr="data-titulo=${t.titulo},data-descripcion=${t.descripcion},data-proyecto=${t.proyecto.nombre},data-prioridad=${t.prioridad},data-estado=${t.estado},data-fecha=${#temporals.format(t.fechaLimite,'dd/MM/yyyy')},data-tarea-id=${t.idTarea}">
-              <i class="fa-solid fa-eye"></i>
-            </button>
-            <a th:href="@{/tarea/iniciar/{id}(id=${t.idTarea})}"
-               class="btn btn-warning btn-sm flex-grow-1">
-              <i class="fa-solid fa-play me-1"></i>Iniciar
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
+			<div class="col-lg-4">
+			    <div class="board-column">
+			        <div class="board-header done-header">
+			            <span>Finalizadas</span>
+			            <span class="board-counter" th:text="${tareas.?[estado.name()=='FINALIZADO'].size()}"></span>
+			        </div>
+			        <div class="empty-column" th:if="${tareas.?[estado.name()=='FINALIZADO'].isEmpty()}">
+			            <i class="fa-solid fa-circle-check"></i>
+			            <span>Aún no hay tareas finalizadas</span>
+			        </div>
+			        <div class="task-modern-card" th:each="t : ${tareas}" th:if="${t.estado.name()=='FINALIZADO'}">
+			            <div class="task-top">
+			                <h6 th:text="${t.titulo}"></h6>
+			                <span class="badge bg-success">Completada</span>
+			            </div>
+			            <p th:text="${t.descripcion}"></p>
+			            <div class="task-date">
+			                <i class="fa-solid fa-calendar"></i>
+			                <span th:text="${#temporals.format(t.fechaLimite,'dd/MM/yyyy')}"></span>
+			            </div>
+			            <div class="task-footer">
+			                <span>
+			                    <i class="fa-solid fa-folder"></i>
+			                    <span th:text="${t.proyecto.nombre}"></span>
+			                </span>
+			                <span class="badge bg-success">FINALIZADO</span>
+			            </div>
+			            <div class="mt-3 d-flex gap-2">
+			                <button class="btn btn-outline-primary btn-sm"
+			                        data-bs-toggle="modal" data-bs-target="#detalleModal"
+			                        th:attr="data-titulo=${t.titulo},data-descripcion=${t.descripcion},data-proyecto=${t.proyecto.nombre},data-prioridad=${t.prioridad},data-estado=${t.estado},data-fecha=${#temporals.format(t.fechaLimite,'dd/MM/yyyy')},data-tarea-id=${t.idTarea}">
+			                    <i class="fa-solid fa-eye"></i>
+			                </button>
+			                <span class="btn btn-success btn-sm flex-grow-1 disabled">
+			                    <i class="fa-solid fa-circle-check"></i> Completada
+			                </span>
+			            </div>
+			        </div>
+			    </div>
+			</div>
 
-    <div class="col-lg-4">
-      <div class="content-card h-100">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <span class="fw-semibold"><i class="fa-solid fa-spinner me-2 text-warning"></i>En proceso</span>
-          <span class="badge bg-warning text-dark rounded-pill"
-                th:text="${tareas.?[estado.name()=='EN_PROCESO'].size()}"></span>
-        </div>
+		</div>
 
-        <div class="text-center text-muted py-4"
-             th:if="${tareas.?[estado.name()=='EN_PROCESO'].isEmpty()}">
-          <i class="fa-solid fa-spinner fa-2x mb-2 d-block"></i>
-          Sin tareas en proceso
-        </div>
+		<div class="row mb-4">
+		    <div class="col-md-4">
+		        <div class="priority-box priority-high">
+		            <h4 th:text="${tareas.?[prioridad.name()=='ALTA'].size()}"></h4>
+		            <span>Prioridad Alta</span>
+		        </div>
+		    </div>
+		    <div class="col-md-4">
+		        <div class="priority-box priority-medium">
+		            <h4 th:text="${tareas.?[prioridad.name()=='MEDIA'].size()}"></h4>
+		            <span>Prioridad Media</span>
+		        </div>
+		    </div>
+		    <div class="col-md-4">
+		        <div class="priority-box priority-low">
+		            <h4 th:text="${tareas.?[prioridad.name()=='BAJA'].size()}"></h4>
+		            <span>Prioridad Baja</span>
+		        </div>
+		    </div>
+		</div>
 
-        <div th:each="t : ${tareas}" th:if="${t.estado.name()=='EN_PROCESO'}"
-             class="border border-warning rounded-3 p-3 mb-2 bg-light">
-          <div class="d-flex justify-content-between align-items-start mb-1">
-            <strong class="small" th:text="${t.titulo}"></strong>
-            <span class="badge bg-warning text-dark ms-2">En proceso</span>
-          </div>
-          <p class="text-muted small mb-2" th:text="${t.descripcion}"></p>
-          <div class="d-flex justify-content-between align-items-center mb-2">
-            <span class="text-muted small">
-              <i class="fa-solid fa-calendar me-1"></i>
-              <span th:text="${#temporals.format(t.fechaLimite,'dd/MM/yyyy')}"></span>
-            </span>
-            <span class="badge"
-                  th:classappend="${t.prioridad.name()=='ALTA'} ? 'bg-danger' : (${t.prioridad.name()=='MEDIA'} ? 'bg-warning text-dark' : 'bg-info text-dark')"
-                  th:text="${t.prioridad}"></span>
-          </div>
-          <div class="text-muted small mb-2">
-            <i class="fa-solid fa-folder me-1"></i>
-            <span th:text="${t.proyecto.nombre}"></span>
-          </div>
-          <div class="d-flex gap-2">
-            <button class="btn btn-outline-primary btn-sm"
-                    data-bs-toggle="modal" data-bs-target="#detalleModal"
-                    th:attr="data-titulo=${t.titulo},data-descripcion=${t.descripcion},data-proyecto=${t.proyecto.nombre},data-prioridad=${t.prioridad},data-estado=${t.estado},data-fecha=${#temporals.format(t.fechaLimite,'dd/MM/yyyy')},data-tarea-id=${t.idTarea}">
-              <i class="fa-solid fa-eye"></i>
-            </button>
-            <a th:href="@{/tarea/finalizar/{id}(id=${t.idTarea})}"
-               class="btn btn-success btn-sm flex-grow-1">
-              <i class="fa-solid fa-check me-1"></i>Completar
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
+		<div class="row g-4">
+			<div class="content-card mb-4">
+			    <h5><i class="fa-solid fa-calendar-days"></i> Próximas entregas</h5>
+			    <div th:each="t : ${tareas}">
+			        <div class="deadline-item">
+			            <strong th:text="${t.titulo}"></strong>
+			            <span class="text-muted" th:text="${#temporals.format(t.fechaLimite,'dd/MM/yyyy')}"></span>
+			        </div>
+			    </div>
+			</div>
 
-    <div class="col-lg-4">
-      <div class="content-card h-100">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <span class="fw-semibold"><i class="fa-solid fa-circle-check me-2 text-success"></i>Finalizadas</span>
-          <span class="badge bg-success rounded-pill"
-                th:text="${tareas.?[estado.name()=='FINALIZADO'].size()}"></span>
-        </div>
+			<div class="content-card mb-4">
+			    <h5 class="mb-4"><i class="fa-solid fa-clock-rotate-left"></i> Actividad reciente</h5>
+			    <div th:each="t : ${tareas}" class="activity-item">
+			        <div class="activity-dot"></div>
+			        <div>
+			            <strong th:text="${t.titulo}"></strong>
+			            <div class="text-muted small">
+			                Proyecto: <span th:text="${t.proyecto.nombre}"></span>
+			            </div>
+			        </div>
+			    </div>
+			</div>
+		</div>
 
-        <div class="text-center text-muted py-4"
-             th:if="${tareas.?[estado.name()=='FINALIZADO'].isEmpty()}">
-          <i class="fa-solid fa-circle-check fa-2x mb-2 d-block"></i>
-          Sin tareas finalizadas
-        </div>
-
-        <div th:each="t : ${tareas}" th:if="${t.estado.name()=='FINALIZADO'}"
-             class="border border-success rounded-3 p-3 mb-2 bg-light">
-          <div class="d-flex justify-content-between align-items-start mb-1">
-            <strong class="small text-decoration-line-through text-muted"
-                    th:text="${t.titulo}"></strong>
-            <span class="badge bg-success ms-2">Completada</span>
-          </div>
-          <p class="text-muted small mb-2" th:text="${t.descripcion}"></p>
-          <div class="text-muted small mb-2">
-            <i class="fa-solid fa-folder me-1"></i>
-            <span th:text="${t.proyecto.nombre}"></span>
-          </div>
-          <div class="d-flex gap-2">
-            <button class="btn btn-outline-secondary btn-sm"
-                    data-bs-toggle="modal" data-bs-target="#detalleModal"
-                    th:attr="data-titulo=${t.titulo},data-descripcion=${t.descripcion},data-proyecto=${t.proyecto.nombre},data-prioridad=${t.prioridad},data-estado=${t.estado},data-fecha=${#temporals.format(t.fechaLimite,'dd/MM/yyyy')},data-tarea-id=${t.idTarea}">
-              <i class="fa-solid fa-eye"></i>
-            </button>
-            <span class="btn btn-success btn-sm flex-grow-1 disabled">
-              <i class="fa-solid fa-circle-check me-1"></i>Completada
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="row g-3 mb-4">
-    <div class="col-md-4">
-      <div class="content-card text-center border-start border-danger border-3">
-        <div class="fs-2 fw-bold text-danger"
-             th:text="${tareas.?[prioridad.name()=='ALTA'].size()}">0</div>
-        <div class="text-muted small">Prioridad Alta</div>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="content-card text-center border-start border-warning border-3">
-        <div class="fs-2 fw-bold text-warning"
-             th:text="${tareas.?[prioridad.name()=='MEDIA'].size()}">0</div>
-        <div class="text-muted small">Prioridad Media</div>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="content-card text-center border-start border-info border-3">
-        <div class="fs-2 fw-bold text-info"
-             th:text="${tareas.?[prioridad.name()=='BAJA'].size()}">0</div>
-        <div class="text-muted small">Prioridad Baja</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="content-card mb-4">
-    <h6 class="fw-semibold mb-3">
-      <i class="fa-solid fa-calendar-days me-2 text-primary"></i>Próximas entregas
-    </h6>
-    <div th:if="${#lists.isEmpty(tareas)}" class="text-muted text-center py-3">
-      No hay entregas próximas
-    </div>
-    <div th:each="t : ${tareas}"
-         class="d-flex justify-content-between align-items-center py-2 border-bottom">
-      <span class="small fw-semibold" th:text="${t.titulo}"></span>
-      <span class="text-muted small"
-            th:text="${#temporals.format(t.fechaLimite,'dd/MM/yyyy')}"></span>
-    </div>
-  </div>
-
-</div>
+	</div>
 </main>
 
 <script th:src="@{/app.js}"></script>
@@ -279,100 +296,109 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <div th:replace="components/footer :: footer"></div>
 
+<!-- Modal de detalle de tarea -->
 <div class="modal fade" id="detalleModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-lg modal-dialog-centered">
-    <div class="modal-content">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content modal-dark-custom">
 
-      <div class="modal-header">
-        <div>
-          <h5 class="modal-title fw-bold" id="mTitulo"></h5>
-          <div class="d-flex gap-2 mt-1">
-            <span class="badge" id="mEstadoBadge"></span>
-            <span class="badge" id="mPrioridadBadge"></span>
-          </div>
-        </div>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-
-      <div class="modal-body">
-        <ul class="nav nav-tabs mb-3" id="detalleTabs" role="tablist">
-          <li class="nav-item">
-            <button class="nav-link active" data-bs-toggle="tab"
-                    data-bs-target="#panel-detalles" type="button">
-              <i class="fa-solid fa-circle-info me-1"></i>Detalles
-            </button>
-          </li>
-          <li class="nav-item">
-            <button class="nav-link" data-bs-toggle="tab"
-                    data-bs-target="#panel-comentarios" type="button">
-              <i class="fa-solid fa-comments me-1"></i>Comentarios
-              <span class="badge bg-secondary ms-1" id="commentCount">0</span>
-            </button>
-          </li>
-          <li class="nav-item">
-            <button class="nav-link" data-bs-toggle="tab"
-                    data-bs-target="#panel-actividad" type="button">
-              <i class="fa-solid fa-clock-rotate-left me-1"></i>Actividad
-            </button>
-          </li>
-        </ul>
-
-        <div class="tab-content">
-
-          <div class="tab-pane fade show active" id="panel-detalles">
-            <div class="row g-3">
-              <div class="col-md-8">
-                <div class="mb-1 text-muted small fw-semibold">Descripción</div>
-                <p id="mDescripcion" class="mb-0"></p>
-              </div>
-              <div class="col-md-4">
-                <div class="mb-3">
-                  <div class="text-muted small fw-semibold mb-1">Proyecto</div>
-                  <p id="mProyecto" class="mb-0"></p>
-                </div>
+            <div class="modal-header border-0 pb-0">
                 <div>
-                  <div class="text-muted small fw-semibold mb-1">Fecha límite</div>
-                  <p id="mFecha" class="mb-0"></p>
+                    <h5 class="modal-title fw-bold" id="mTitulo"></h5>
+                    <div class="d-flex gap-2 mt-2">
+                        <span class="badge-detail" id="mEstadoBadge"></span>
+                        <span class="badge-detail" id="mPrioridadBadge"></span>
+                    </div>
                 </div>
-              </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
-          </div>
 
-          <div class="tab-pane fade" id="panel-comentarios">
-            <div id="comentariosList" class="mb-3">
-              <p class="text-muted text-center py-3">
-                <i class="fa-solid fa-spinner fa-spin me-2"></i>Cargando comentarios...
-              </p>
+            <div class="modal-body pt-3 pb-0">
+                <ul class="nav nav-tabs modal-tabs" id="detalleTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="tab-detalles"
+                                data-bs-toggle="tab" data-bs-target="#panel-detalles"
+                                type="button" role="tab">
+                            <i class="fa-solid fa-circle-info me-1"></i> Detalles
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="tab-comentarios"
+                                data-bs-toggle="tab" data-bs-target="#panel-comentarios"
+                                type="button" role="tab">
+                            <i class="fa-solid fa-comments me-1"></i> Comentarios
+                            <span class="comment-count ms-1" id="commentCount">0</span>
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="tab-actividad"
+                                data-bs-toggle="tab" data-bs-target="#panel-actividad"
+                                type="button" role="tab">
+                            <i class="fa-solid fa-clock-rotate-left me-1"></i> Actividad
+                        </button>
+                    </li>
+                </ul>
             </div>
-            <div class="d-flex gap-2 align-items-start">
-              <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center"
-                   style="width:36px;height:36px;flex-shrink:0;">
-                <span id="userInitial">U</span>
-              </div>
-              <div class="flex-grow-1">
-                <textarea id="nuevoComentario" class="form-control mb-2" rows="2"
-                          placeholder="Escribe un comentario... (Ctrl+Enter para enviar)"></textarea>
-                <div class="text-end">
-                  <button class="btn btn-primary btn-sm" onclick="enviarComentario()">
-                    <i class="fa-solid fa-paper-plane me-1"></i>Comentar
-                  </button>
+
+            <div class="modal-body pt-3">
+                <div class="tab-content" id="detalleTabsContent">
+
+                    <div class="tab-pane fade show active" id="panel-detalles" role="tabpanel">
+                        <div class="row g-3">
+                            <div class="col-md-8">
+                                <div class="detail-block">
+                                    <span class="detail-label"><i class="fa-solid fa-align-left"></i> Descripción</span>
+                                    <p class="detail-value mb-0" id="mDescripcion"></p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="detail-block">
+                                    <span class="detail-label"><i class="fa-solid fa-folder"></i> Proyecto</span>
+                                    <p class="detail-value mb-0" id="mProyecto"></p>
+                                </div>
+                                <div class="detail-block mt-2">
+                                    <span class="detail-label"><i class="fa-solid fa-calendar"></i> Fecha límite</span>
+                                    <p class="detail-value mb-0" id="mFecha"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="panel-comentarios" role="tabpanel">
+                        <div class="comment-section">
+                            <div class="comment-list" id="comentariosList">
+                                <div class="comment-loading">
+                                    <i class="fa-solid fa-spinner fa-spin"></i> Cargando comentarios...
+                                </div>
+                            </div>
+                            <div class="comment-input-area mt-3">
+                                <div class="comment-input-wrapper">
+                                    <div class="comment-avatar-sm">
+                                        <span id="userInitial">U</span>
+                                    </div>
+                                    <textarea id="nuevoComentario" class="comment-textarea" rows="2"
+                                              placeholder="Escribe un comentario... (Ctrl+Enter para enviar)"></textarea>
+                                </div>
+                                <div class="d-flex justify-content-end mt-2">
+                                    <button id="btnEnviarComentario" class="btn-send-comment" onclick="enviarComentario()">
+                                        <i class="fa-solid fa-paper-plane"></i> Comentar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="panel-actividad" role="tabpanel">
+                        <div class="comment-empty tab-actividad-placeholder">
+                            <i class="fa-solid fa-clock-rotate-left"></i>
+                            <span>Historial de actividad próximamente</span>
+                        </div>
+                    </div>
+
                 </div>
-              </div>
             </div>
-          </div>
-
-          <div class="tab-pane fade" id="panel-actividad">
-            <div class="text-center text-muted py-4">
-              <i class="fa-solid fa-clock-rotate-left fa-2x mb-2 d-block"></i>
-              Historial de actividad próximamente
-            </div>
-          </div>
 
         </div>
-      </div>
-
     </div>
-  </div>
 </div>
 
 </body>
