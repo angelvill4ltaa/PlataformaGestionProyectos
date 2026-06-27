@@ -1,0 +1,76 @@
+<nav class="navbar navbar-expand-lg navbar-dark" th:fragment="navbar">
+	 <div class="container-fluid px-4">
+	     <div class="d-flex align-items-center">
+	         <button class="menu-btn" id="menuBtn">
+	             <i class="fa-solid fa-bars"></i>
+	         </button>
+
+		 <a class="navbar-brand d-flex align-items-center gap-2" th:href="@{/}">   
+		     <div class="logo-img-navbar">
+		         <img th:src="@{/assets/logo.png}" alt="Operae">
+		     </div>
+		     <div class="brand-section">
+		         <span class="brand-name">Operae</span>
+		     </div>
+		 </a>
+	     </div>
+
+	 <form class="navbar-search" th:action="@{/buscar}" method="get">
+	     <i class="fa-solid fa-magnifying-glass"></i>
+	     <input type="text" name="buscador" placeholder="Buscar proyectos, tareas o usuarios...">
+	 </form>
+
+         <div class="navbar-actions">
+
+             <!-- NOTIFICACIONES -->
+             <div class="nav-dropdown-wrapper" id="notifWrapper">
+                 <button class="nav-icon-btn" id="notifBtn" onclick="toggleNavDropdown('notifPanel', 'notifWrapper')">
+                     <i class="fa-regular fa-bell"></i>
+                     <span class="nav-badge" id="notifBadge" style="display:none"></span>
+                 </button>
+                 <div class="nav-dropdown-panel" id="notifPanel">
+                     <div class="nav-panel-header">
+                         <strong>Notificaciones</strong>
+                         <button class="btn-mark-all" onclick="marcarTodasLeidas()">Marcar todas como leídas</button>
+                     </div>
+                     <div class="nav-panel-body" id="notifList">
+                         <div class="nav-panel-empty">
+                             <i class="fa-regular fa-bell-slash"></i>
+                             <span>No hay notificaciones</span>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+
+             <!-- MENSAJES -->
+             <div class="nav-dropdown-wrapper" id="msgWrapper">
+                 <button class="nav-icon-btn" id="msgBtn" onclick="toggleNavDropdown('msgPanel', 'msgWrapper')">
+                     <i class="fa-regular fa-envelope"></i>
+                     <span class="nav-badge" id="msgBadge" style="display:none"></span>
+                 </button>
+                 <div class="nav-dropdown-panel" id="msgPanel">
+                     <div class="nav-panel-header">
+                         <strong>Mensajes recientes</strong>
+                         <span class="text-muted small">Comentarios en tus tareas</span>
+                     </div>
+                     <div class="nav-panel-body" id="msgList">
+                         <div class="nav-panel-empty">
+                             <i class="fa-regular fa-envelope-open"></i>
+                             <span>No hay mensajes nuevos</span>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+
+             <a th:href="@{/perfil}" class="user-profile text-decoration-none text-white" th:if="${session.usuario != null}">
+	 		<div class="avatar-navbar">
+	 		     <span th:text="${session.usuario.nombre.substring(0,1).toUpperCase()}">U</span>
+	 		</div>
+                 <div>
+                     <div class="user-name" th:text="${session.usuario.nombre}"></div>
+                     <small th:text="${session.usuario.rol.nombre}">Rol</small>
+                 </div>
+             </a>
+         </div>
+	 </div>
+ </nav>

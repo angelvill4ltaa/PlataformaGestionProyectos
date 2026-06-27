@@ -1,0 +1,58 @@
+<footer class="footer" th:fragment="footer">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-md-5">
+				<div class="footer-brand">
+					<div class="footer-logo">
+					    <img th:src="@{/assets/logo.png}" alt="Operae">
+					</div>
+				        <h5 class="footer-title">Operae</h5>
+				</div>
+
+				<p class="footer-text">
+				    Plataforma para planificar, colaborar y entregar proyectos de forma eficiente.
+				</p>
+            </div>
+
+            <div class="col-md-3">
+                <h6 class="footer-subtitle">Plataforma</h6>
+                <ul class="footer-links">
+                    <li><a th:href="@{/index}">Inicio</a></li>
+                    <li><a th:href="@{/usuarios}">Usuarios</a></li>
+                    <li><a th:href="@{/proyectos}">Proyectos</a></li>
+                    <li><a th:href="@{/tareas}">Tareas</a></li>
+                </ul>
+            </div>
+
+            <div class="col-md-4">
+                <h6 class="footer-subtitle">Soporte</h6>
+                <ul class="footer-links">
+                    <li><a href="#">Centro de ayuda</a></li>
+                    <li><a href="#">Contacto</a></li>
+                    <li><a href="#">Política de privacidad</a></li>
+                    <li><a href="#">Términos y condiciones</a></li>
+                </ul>
+            </div>
+			
+			<div class="footer-social">
+			    <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+			    <a href="#"><i class="fa-brands fa-github"></i></a>
+			    <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
+			</div>
+        </div>
+
+        <hr class="footer-divider">
+
+		<div class="footer-bottom">
+		    <span>© 2026 Operae - Todos los derechos reservados</span>
+		    <div class="footer-bottom-links">
+		        <a href="#">Privacidad</a>
+		        <a href="#">Términos</a>
+		        <a href="#">Seguridad</a>
+		        <a href="#">Estado</a>
+		    </div>
+		</div>
+
+    </div>
+</footer>

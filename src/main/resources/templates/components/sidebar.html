@@ -1,0 +1,55 @@
+<div id="sidebar" class="sidebar" th:fragment="sidebar">
+
+    <div class="sidebar-user">
+        <div class="avatar-sidebar">
+			<span th:text="${session.usuario != null ? session.usuario.nombre.substring(0,1).toUpperCase() : 'U'}"></span>
+        </div>
+		
+		<h6 th:text="${session.usuario != null ? session.usuario.nombre : 'Usuario'}"></h6>
+		<small th:text="${session.usuario != null ? session.usuario.correo : 'Sin sesión'}"></small>       
+    </div>
+
+    <div class="sidebar-section">
+        <span class="sidebar-title">
+            GENERAL
+        </span>
+        <a th:href="@{/index}">
+            <i class="fa-solid fa-house"></i>
+            Inicio
+        </a>
+        <a th:href="@{/usuarios}">
+            <i class="fa-solid fa-users"></i>
+            Usuarios
+        </a>
+        <a th:href="@{/proyectos}">
+            <i class="fa-solid fa-folder-open"></i>
+            Proyectos
+        </a>
+        <a th:href="@{/tareas}">
+            <i class="fa-solid fa-list-check"></i>
+            Tareas
+        </a>
+    </div>
+
+    <div class="sidebar-section">
+        <span class="sidebar-title">
+            CONFIGURACIÓN
+        </span>
+        <a href="#">
+            <i class="fa-solid fa-gear"></i>
+            Ajustes
+        </a>
+        <a href="#">
+            <i class="fa-solid fa-shield-halved"></i>
+            Seguridad
+        </a>
+    </div>
+
+    <div class="sidebar-footer">
+		<a th:href="@{/logout}" class="logout-btn" onclick="confirmLogout(event)">
+		    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+		    <span>Cerrar sesión</span>
+		</a>
+    </div>
+
+</div>
